@@ -1,0 +1,7 @@
+pykeen
+rdflib==7.0.0
+pandas==2.2.2
+pandasql==0.7.3
+TravSHACL==1.7.1
+sqlalchemy==2.0.31
+alive_progress
