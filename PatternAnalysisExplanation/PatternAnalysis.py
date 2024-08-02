@@ -16,11 +16,12 @@ path_to_script = os.path.abspath(os.path.join(current_dir, relative_path))
 sys.path.append(path_to_script)
 import ComputeCommunities as SemCD
 
-def target_cluster(kg_name, model, target_predicate, cls_algorithm, th):
+def target_cluster(kg_name, model, target_predicate, cls_algorithm, th, aggregate_vector):
     kg = SemCD.get_kg('../KG/' + kg_name + '/LungCancer.tsv')
     """Load KGE model"""
-    path_model = '../KGEmbedding/' + kg_name + '/'
-    df_donor = pd.read_csv(path_model + model + '/embedding_donors.csv')
+    # df_donor = pd.read_csv(path_model + model + '/embedding_donors.csv')
+    df_donor = aggregate_vector.loc[aggregate_vector.Model==model]
+    df_donor.drop(columns=['Model'], inplace=True)
     """Load ClinicalRecord responses file"""
     target = SemCD.get_target(kg, target_predicate, df_donor)
     path = '../PatternDetection/clusteringMeasures/' + model + '/' + cls_algorithm + '_' + str(th) + '/clusters/'
@@ -29,11 +30,11 @@ def target_cluster(kg_name, model, target_predicate, cls_algorithm, th):
     entries = os.listdir(path)
     for file in entries:
         cls = pd.read_csv(path + file, delimiter="\t", header=None)
-        cls.columns = ['ClinicalRecord']
-        target.loc[target.ClinicalRecord.isin(cls.ClinicalRecord), 'Community'] = 'Community ' + file[:-4].split('-')[1]
-        list_donor = list_donor + list(cls.ClinicalRecord)
+        cls.columns = ['Entity']
+        target.loc[target.Entity.isin(cls.Entity), 'Community'] = 'Community ' + file[:-4].split('-')[1]
+        list_donor = list_donor + list(cls.Entity)
 
-    target = target.loc[target.ClinicalRecord.isin(list_donor)]
+    target = target.loc[target.Entity.isin(list_donor)]
     replacement_mapping_dict = {'No_Progression': 'No relapse',
                                 'Relapse': 'Relapse',
                                 'Progression': 'Relapse'}
