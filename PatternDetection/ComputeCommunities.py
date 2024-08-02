@@ -279,3 +279,4 @@ def run(entity_type, endpoint, kg_name, target_predicate, model_list, threshold)
         Utility.plot_treatment(df_donor, path_plot)
         """Density of Donor Similarity"""
         Utility.density_plot(list_sim, path_plot)
+        return aggregate_vector
