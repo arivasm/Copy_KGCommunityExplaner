@@ -86,7 +86,7 @@ def composite_embedding(entity_type, endpoint, model_list):
         ego_network = ego_network.loc[ego_network['predicate']!='type']
 
         for model in model_list:
-            model_path = "../../KGEmbedding/OriginalKG/"+model+"/vectors/"
+            model_path = "../KGEmbedding/OriginalKG/"+model+"/vectors/"
             aggregate = aggregate_ego_network(ego_network, model_path)
             aggregate_vector[model].append(aggregate)  # Append the aggregate to the list for the current model
 
